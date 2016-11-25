@@ -324,6 +324,19 @@ void SetSystemLanguage(SystemLanguage language);
 SystemLanguage GetSystemLanguage();
 
 /**
+ * Sets the country data in config savegame.
+ * @param unknown  unknown data (leave for research).
+ * @param country_code the country corresponding code.
+ */
+void SetCountryInfo(u8 unknown[3], u8 country_code);
+
+/**
+ * Gets the country data  from the config savegame.
+ * @returns a tuple of (unknown, country_code) of birthday
+ */
+std::tuple<unsigned char*, u8> GetCountryInfo();
+
+/**
  * Sets the sound output mode in config savegame.
  * @param mode the sound output mode to set
  */

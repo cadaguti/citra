@@ -589,5 +589,16 @@ SoundOutputMode GetSoundOutputMode() {
     return static_cast<SoundOutputMode>(block);
 }
 
+void SetCountryInfo(unsigned char* unknown, u8 country_code) {
+    ConsoleCountryInfo block = {unknown[0], unknown[1], unknown[2], country_code};
+    SetConfigInfoBlock(CountryInfoBlockID, sizeof(block), 4, &block);
+}
+
+std::tuple<unsigned char*, u8> GetCountryInfo() {
+    ConsoleCountryInfo block;
+    GetConfigInfoBlock(CountryInfoBlockID, sizeof(block), 8, &block);
+    return std::make_tuple(block.unknown, block.country_code);
+}
+
 } // namespace CFG
 } // namespace Service

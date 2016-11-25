@@ -17,6 +17,7 @@ ConfigureSystem::ConfigureSystem(QWidget* parent) : QWidget(parent), ui(new Ui::
     ui->setupUi(this);
     connect(ui->combo_birthmonth, SIGNAL(currentIndexChanged(int)),
             SLOT(updateBirthdayComboBox(int)));
+            this->initCountryComboBox();
 
     this->setConfiguration();
 }
@@ -68,6 +69,11 @@ void ConfigureSystem::ReadSystemSettings() {
     language_index = Service::CFG::GetSystemLanguage();
     ui->combo_language->setCurrentIndex(language_index);
 
+    // set country
+    std::tie(unknown, country_index) = Service::CFG::GetCountryInfo();
+    country_index = ui->combo_country->findText(country_names[country_index]);
+    ui->combo_country->setCurrentIndex(country_index);
+
     // set sound output mode
     sound_index = Service::CFG::GetSoundOutputMode();
     ui->combo_sound->setCurrentIndex(sound_index);
@@ -101,6 +107,13 @@ void ConfigureSystem::applyConfiguration() {
     int new_language = ui->combo_language->currentIndex();
     if (language_index != new_language) {
         Service::CFG::SetSystemLanguage(static_cast<Service::CFG::SystemLanguage>(new_language));
+        modified = true;
+    }
+
+    // apply country
+    int new_country = ui->combo_country->currentIndex();
+    if (country_index != new_country) {
+        Service::CFG::SetCountryInfo(unknown, vectorIndexOf(country_names, ui->combo_country->currentText()));
         modified = true;
     }
 
@@ -139,4 +152,22 @@ void ConfigureSystem::updateBirthdayComboBox(int birthmonth_index) {
 
     // restore the day selection
     ui->combo_birthday->setCurrentIndex(birthday_index);
+}
+
+void ConfigureSystem::initCountryComboBox() {
+    // init the country combo box
+    ui->combo_country->clear();
+    for (int i = 0; i < country_names.size(); i++) {
+        if (country_names[i] != "")
+            ui->combo_country->addItem(country_names[i]);
+        }
+}
+
+int ConfigureSystem::vectorIndexOf(std::vector<char*> source, QString text) {
+    // loop that looks for the string into the source array
+    for (int i = 0; i < source.size(); i++) {
+        if (source[i] == text)
+        return i;
+    }
+    return 0;
 }

@@ -191,6 +191,16 @@
           </item>
          </widget>
         </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_country">
+          <property name="text">
+           <string>Country</string>
+          </property>
+         </widget>
+        </item>
+          <item>
+           <widget class="QComboBox" name="combo_country"/>
+          </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_sound">
           <property name="text">
